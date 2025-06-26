@@ -33,8 +33,10 @@ def serialize_animals(animal_item):
     return output
 
 def generate_html(user_animal):
-    animals_data = get_data_with_api_key(API_KEY, ANIMALS_URL, user_animal)
     output = ''
+    animals_data = get_data_with_api_key(API_KEY, ANIMALS_URL, user_animal)
+    if animals_data == []:
+        output += f'<h2 style="color: darkblue">Unfortunately, <em style="color:red">{user_animal}</em> was not found.</h2>'
     for animal in animals_data:
         output += serialize_animals(animal)
 
