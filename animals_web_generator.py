@@ -1,10 +1,12 @@
-import json
+import requests
 
-def load_data(file_path):
-    with open(file_path) as json_file:
-        data = json.load(json_file)
-        return data
+API_KEY = "bMGJesFjI7d2IT0UKSI97A==EqOnGneKRwRohsjC"
+ANIMALS_URL = "https://api.api-ninjas.com/v1/animals"
 
+def get_data_with_api_key(API_KEY, ANIMALS_URL, user_animal):
+    headers = {'X-Api-Key': API_KEY}
+    response = requests.get(f"{ANIMALS_URL}?name={user_animal}", headers=headers)
+    return response.json()
 
 
 def serialize_animals(animal_item):
@@ -16,6 +18,7 @@ def serialize_animals(animal_item):
         animal_type = animal_item["characteristics"]["type"]
     except KeyError:
         animal_type = None
+
     output += '<li class="cards__item">'
     output += f'<div class="card__title">{name}</div>\n'
     output += f'<div class="card__text">\n'
@@ -30,20 +33,22 @@ def serialize_animals(animal_item):
     return output
 
 def generate_html():
-    animals_data = load_data("animals_data.json")
+    animals_data = get_data_with_api_key(API_KEY, ANIMALS_URL, 'Fox')
     output = ''
     for animal in animals_data:
         output += serialize_animals(animal)
-        with open("animals_template.html", "r") as template:
+
+    with open("animals_template.html", "r") as template:
             template = template.read()
 
     template = template.replace("__REPLACE_ANIMALS_INFO__", output)
 
-    with open("animals.html", "w") as animals_data:
-        animals_data.write(template)
+    with open("animals.html", "w") as animals_html:
+        animals_html.write(template)
 
 def main():
    generate_html()
+
 
 if __name__ == "__main__":
     main()
