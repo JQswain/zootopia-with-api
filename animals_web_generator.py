@@ -6,7 +6,10 @@ def serialize_animals(animal_item):
     output = ''
     name = animal_item["name"]
     diet = animal_item["characteristics"]["diet"]
-    location = animal_item["locations"][0]
+    try:
+        location = animal_item["locations"][0]
+    except IndexError:
+        location = ''
     try:
         animal_type = animal_item["characteristics"]["type"]
     except KeyError:
