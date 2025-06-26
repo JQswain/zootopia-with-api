@@ -9,7 +9,7 @@ def serialize_animals(animal_item):
     try:
         location = animal_item["locations"][0]
     except IndexError:
-        location = ''
+        location = None
     try:
         animal_type = animal_item["characteristics"]["type"]
     except KeyError:
@@ -19,11 +19,16 @@ def serialize_animals(animal_item):
     output += f'<div class="card__title">{name}</div>\n'
     output += f'<div class="card__text">\n'
     output += f'<ul>\n<li><strong>Diet:</strong> {diet}</li>\n'
-    output += f'<li><strong>Location:</strong> {location}</li>\n'
+
+    if location is not None:
+        output += f'<li><strong>Location:</strong> {location}</li>\n'
+    else:
+        output += f""
     if animal_type is not None:
         output += f'<li><strong>Type:</strong> {animal_type}</li>\n'
     else:
         output += f""
+
     output += '</ul>\n</div>\n</li>\n'
 
     return output
