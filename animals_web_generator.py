@@ -32,8 +32,8 @@ def serialize_animals(animal_item):
 
     return output
 
-def generate_html():
-    animals_data = get_data_with_api_key(API_KEY, ANIMALS_URL, 'Fox')
+def generate_html(user_animal):
+    animals_data = get_data_with_api_key(API_KEY, ANIMALS_URL, user_animal)
     output = ''
     for animal in animals_data:
         output += serialize_animals(animal)
@@ -47,7 +47,10 @@ def generate_html():
         animals_html.write(template)
 
 def main():
-   generate_html()
+    user_animal = input("Enter the name of an animal: ")
+    generate_html(user_animal)
+    print(f"Website was successfully generated to the file animals.html")
+
 
 
 if __name__ == "__main__":
