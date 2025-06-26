@@ -1,15 +1,8 @@
-import requests
-
-API_KEY = "bMGJesFjI7d2IT0UKSI97A==EqOnGneKRwRohsjC"
-ANIMALS_URL = "https://api.api-ninjas.com/v1/animals"
-
-def get_data_with_api_key(API_KEY, ANIMALS_URL, user_animal):
-    headers = {'X-Api-Key': API_KEY}
-    response = requests.get(f"{ANIMALS_URL}?name={user_animal}", headers=headers)
-    return response.json()
-
+import data_fetcher
 
 def serialize_animals(animal_item):
+    """Serialises the data into the format required from the animals_template.html,
+    for use of adding it to the animals.html file"""
     output = ''
     name = animal_item["name"]
     diet = animal_item["characteristics"]["diet"]
@@ -32,9 +25,10 @@ def serialize_animals(animal_item):
 
     return output
 
-def generate_html(user_animal):
+def generate_html(animals_data, user_animal):
+    """Generates a new html file with the data collected, and a user, inputted animal,
+    if there are errors it will print that onto the animals.html"""
     output = ''
-    animals_data = get_data_with_api_key(API_KEY, ANIMALS_URL, user_animal)
     if animals_data == []:
         output += f'<h2 style="color: darkblue">Unfortunately, <em style="color:red">{user_animal}</em> was not found.</h2>'
     for animal in animals_data:
@@ -50,7 +44,8 @@ def generate_html(user_animal):
 
 def main():
     user_animal = input("Enter the name of an animal: ")
-    generate_html(user_animal)
+    animals_data = data_fetcher.get_data_with_api_key(user_animal)
+    generate_html(animals_data, user_animal)
     print(f"Website was successfully generated to the file animals.html")
 
 
